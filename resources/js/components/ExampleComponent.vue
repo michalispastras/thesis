@@ -7,7 +7,9 @@
                 </a>
             </div>
             <div class="col">
-                <button class="btn btn-primary">DSS</button>
+                <a href="/data-search">
+                    <button class="btn btn-primary">DSS</button>
+                </a>
             </div>
             <div class="col">
                 <button class="btn btn-primary">TOOL 1</button>

@@ -16,3 +16,4 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/big-data', 'Controller@showBigDataPage')->name('big-data');
+Route::get('/data-search', 'Controller@showDataSearchPage')->name('data-search');

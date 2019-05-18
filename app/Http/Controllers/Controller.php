@@ -14,4 +14,8 @@ class Controller extends BaseController
     public function showBigDataPage() {
         return view('big-data');
     }
+
+    public function showDataSearchPage() {
+        return view('data-search');
+    }
 }
