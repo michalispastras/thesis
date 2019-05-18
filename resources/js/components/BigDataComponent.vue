@@ -5,14 +5,14 @@
                 <i class="fas fa-spinner fa-spin" style="font-size: 400%;"></i>
             </div>
             <div class="card-container mb-2 col-md-6 col-lg-4 col-sm-12" v-for="article in articles">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ article.title }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ article.author }}</h6>
-                    <p class="card-text">{{ article.description }}</p>
-                    <a :href="article.url" target="_blank" class="card-link">Read more</a>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ article.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ article.author }}</h6>
+                        <p class="card-text">{{ article.description }}</p>
+                        <a :href="article.url" target="_blank" class="card-link">Read more</a>
+                    </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>

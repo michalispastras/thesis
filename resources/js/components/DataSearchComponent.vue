@@ -40,6 +40,18 @@
                 <i class="fas fa-spinner fa-spin" style="font-size: 400%;"></i>
             </div>
         </div>
+        <div class="row mt-4" v-if="articles.length"><h3>{{ articles.length }} Articles Found:</h3></div>
+        <div class="row mt-4">
+            <div class="card-container mb-2 col-md-6 col-lg-4 col-sm-12" v-for="article in articles">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ article.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ article.day }} {{ article.month }} {{ article.year }}</h6>
+                        <p class="card-text">{{ article.articleTitle }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -56,7 +68,8 @@
                 endYear: 2019,
                 searchText: null,
                 errorMessage: null,
-                infoMessage: null
+                infoMessage: null,
+                articles: []
             }
         },
         computed : {
@@ -91,10 +104,30 @@
                 const url = SEARCH_URL + 'efetch.fcgi?db=pubmed&id=' + ids.join() + '&rettype=xml';
                 console.log(url);
                 axios.get(url).then(res => {
-                   console.log(res.data);
-                    this.loading = false;
-                    this.infoMessage = null;
+                    this.parseAndDisplayArticles(res);
                 });
+            },
+            parseAndDisplayArticles(res) {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(res.data,"text/xml");
+
+                const articleElemets = xmlDoc.getElementsByTagName("PubmedArticle");
+                this.articles = [];
+                for (let articleEl of articleElemets) {
+                    const pubDateEl = articleEl.getElementsByTagName('PubDate').item(0);
+                    console.log(pubDateEl);
+                    if(pubDateEl.getElementsByTagName('Year').item(0) && pubDateEl.getElementsByTagName('Month').item(0) && pubDateEl.getElementsByTagName('Day').item(0))
+                        this.articles.push({
+                            year: pubDateEl.getElementsByTagName('Year').item(0).innerHTML,
+                            month: pubDateEl.getElementsByTagName('Month').item(0).innerHTML,
+                            day: pubDateEl.getElementsByTagName('Day').item(0).innerHTML,
+                            title: articleEl.getElementsByTagName('Title').item(0).innerHTML,
+                            articleTitle: articleEl.getElementsByTagName('ArticleTitle').item(0).innerHTML
+                        });
+                }
+                this.loading = false;
+                this.infoMessage = null;
+                console.log(this.articles);
             }
         },
         mounted() {

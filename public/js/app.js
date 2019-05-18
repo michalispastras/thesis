@@ -1865,6 +1865,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var SEARCH_URL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1875,7 +1887,8 @@ var SEARCH_URL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
       endYear: 2019,
       searchText: null,
       errorMessage: null,
-      infoMessage: null
+      infoMessage: null,
+      articles: []
     };
   },
   computed: {
@@ -1935,10 +1948,49 @@ var SEARCH_URL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
       var url = SEARCH_URL + 'efetch.fcgi?db=pubmed&id=' + ids.join() + '&rettype=xml';
       console.log(url);
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url).then(function (res) {
-        console.log(res.data);
-        _this2.loading = false;
-        _this2.infoMessage = null;
+        _this2.parseAndDisplayArticles(res);
       });
+    },
+    parseAndDisplayArticles: function parseAndDisplayArticles(res) {
+      var parser = new DOMParser();
+      var xmlDoc = parser.parseFromString(res.data, "text/xml");
+      var articleElemets = xmlDoc.getElementsByTagName("PubmedArticle");
+      this.articles = [];
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = articleElemets[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var articleEl = _step2.value;
+          var pubDateEl = articleEl.getElementsByTagName('PubDate').item(0);
+          console.log(pubDateEl);
+          if (pubDateEl.getElementsByTagName('Year').item(0) && pubDateEl.getElementsByTagName('Month').item(0) && pubDateEl.getElementsByTagName('Day').item(0)) this.articles.push({
+            year: pubDateEl.getElementsByTagName('Year').item(0).innerHTML,
+            month: pubDateEl.getElementsByTagName('Month').item(0).innerHTML,
+            day: pubDateEl.getElementsByTagName('Day').item(0).innerHTML,
+            title: articleEl.getElementsByTagName('Title').item(0).innerHTML,
+            articleTitle: articleEl.getElementsByTagName('ArticleTitle').item(0).innerHTML
+          });
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
+      this.loading = false;
+      this.infoMessage = null;
+      console.log(this.articles);
     }
   },
   mounted: function mounted() {}
@@ -38040,7 +38092,48 @@ var render = function() {
             ]
           )
         : _vm._e()
-    ])
+    ]),
+    _vm._v(" "),
+    _vm.articles.length
+      ? _c("div", { staticClass: "row mt-4" }, [
+          _c("h3", [_vm._v(_vm._s(_vm.articles.length) + " Articles Found:")])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "row mt-4" },
+      _vm._l(_vm.articles, function(article) {
+        return _c(
+          "div",
+          { staticClass: "card-container mb-2 col-md-6 col-lg-4 col-sm-12" },
+          [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-body" }, [
+                _c("h5", { staticClass: "card-title" }, [
+                  _vm._v(_vm._s(article.title))
+                ]),
+                _vm._v(" "),
+                _c("h6", { staticClass: "card-subtitle mb-2 text-muted" }, [
+                  _vm._v(
+                    _vm._s(article.day) +
+                      " " +
+                      _vm._s(article.month) +
+                      " " +
+                      _vm._s(article.year)
+                  )
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "card-text" }, [
+                  _vm._v(_vm._s(article.articleTitle))
+                ])
+              ])
+            ])
+          ]
+        )
+      }),
+      0
+    )
   ])
 }
 var staticRenderFns = []
