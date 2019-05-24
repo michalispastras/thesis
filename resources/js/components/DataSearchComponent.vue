@@ -82,7 +82,9 @@
             search: function() {
                 this.infoMessage = 'Searching...';
                 this.loading = true;
-                const url = SEARCH_URL + 'esearch.fcgi?db=pubmed&term=' + this.searchText + '+AND+' + this.startYear + '+AND+' + this.endYear;
+                const searchText = this.searchText.trim().replace(/\s+/g, '+');
+                const url = SEARCH_URL + 'esearch.fcgi?db=pubmed&term=' + searchText + '+AND+' + this.startYear + '+AND+' + this.endYear;
+                this.articles = [];
                 axios.get(url).then(res => {
                     let ids = [];
                     const parser = new DOMParser();

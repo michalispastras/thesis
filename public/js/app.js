@@ -1907,7 +1907,9 @@ var SEARCH_URL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
 
       this.infoMessage = 'Searching...';
       this.loading = true;
-      var url = SEARCH_URL + 'esearch.fcgi?db=pubmed&term=' + this.searchText + '+AND+' + this.startYear + '+AND+' + this.endYear;
+      var searchText = this.searchText.trim().replace(/\s+/g, '+');
+      var url = SEARCH_URL + 'esearch.fcgi?db=pubmed&term=' + searchText + '+AND+' + this.startYear + '+AND+' + this.endYear;
+      this.articles = [];
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url).then(function (res) {
         var ids = [];
         var parser = new DOMParser();
