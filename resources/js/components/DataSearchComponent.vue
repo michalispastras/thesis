@@ -58,7 +58,7 @@
 <script>
     import axios from 'axios';
 
-    const SEARCH_URL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
+    const SEARCH_URL = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
 
     export default {
         data() {

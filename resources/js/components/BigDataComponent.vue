@@ -31,7 +31,7 @@
             }
         },
         mounted() {
-            axios.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=' + API_KEY).then(res => {
+            axios.get('http://newsapi.org/v2/top-headlines?country=us&apiKey=' + API_KEY).then(res => {
                 this.articles = res.data.articles;
                 this.loading = false;
                 console.log(this.articles);
